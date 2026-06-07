@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADN Pune | Architects & Designers Network</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <nav>
+      <div class="brand">ADN</div>
+      <a href="#register" class="nav-btn">Register</a>
+    </nav>
+
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Pune Chapter</p>
+        <h1>Architects & Designers Network</h1>
+        <p class="subtitle">A curated community for architects and interior designers to connect, collaborate and grow together.</p>
+        <a href="#register" class="btn">Register Now</a>
+      </div>
+      <div class="hero-card">
+        <img src="./logo.png" alt="ADN Logo" />
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2>Why Join ADN?</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Connect</h3>
+        <p>Meet architects, interior designers and design-led professionals from Pune.</p>
+      </div>
+      <div class="card">
+        <h3>Collaborate</h3>
+        <p>Build meaningful project relationships and exchange genuine opportunities.</p>
+      </div>
+      <div class="card">
+        <h3>Grow</h3>
+        <p>Learn from peers, share ideas and become part of a premium design network.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <h2>Who Can Register?</h2>
+    <div class="tags">
+      <span>Architects</span>
+      <span>Interior Designers</span>
+      <span>Design Studios</span>
+      <span>Design Students</span>
+      <span>Allied Design Professionals</span>
+    </div>
+  </section>
+
+  <section id="register" class="section register">
+    <div class="form-wrap">
+      <div>
+        <p class="eyebrow">Registration</p>
+        <h2>Apply to Join ADN Pune</h2>
+        <p>Fill the form below. Membership approval will be based on community relevance.</p>
+      </div>
+
+      <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <label>Full Name
+          <input type="text" name="full_name" required />
+        </label>
+
+        <label>Firm / Studio Name
+          <input type="text" name="firm_name" required />
+        </label>
+
+        <label>Profession
+          <select name="profession" required>
+            <option value="">Select</option>
+            <option>Architect</option>
+            <option>Interior Designer</option>
+            <option>Architect & Interior Designer</option>
+            <option>Design Student</option>
+            <option>Other</option>
+          </select>
+        </label>
+
+        <label>Mobile Number / WhatsApp
+          <input type="tel" name="mobile" required />
+        </label>
+
+        <label>City
+          <input type="text" name="city" value="Pune" required />
+        </label>
+
+        <label>Instagram / Website
+          <input type="text" name="website" />
+        </label>
+
+        <label>Interested in ADN Pune Meetup?
+          <select name="meetup_interest" required>
+            <option value="">Select</option>
+            <option>Yes</option>
+            <option>Maybe</option>
+            <option>No</option>
+          </select>
+        </label>
+
+        <button type="submit">Submit Registration</button>
+        <p class="note">Replace YOUR_FORM_ID with your Formspree ID, or connect this form to your backend.</p>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <p>ADN — Architects & Designers Network</p>
+    <p>Connect • Collaborate • Grow</p>
+  </footer>
+</body>
+</html>
