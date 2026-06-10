@@ -24,7 +24,10 @@ const cluster = require('cluster');
 const http = require('http');
 const numCPUs = require('os').cpus().length;
 
-if (cluster.isMaster) {
+// Check if running inside Vercel serverless functions
+const isServerless = process.env.VERCEL || process.env.NOW_REGION;
+
+if (cluster.isMaster && !isServerless) {
   console.log(`[Master] Process ${process.pid} is running`);
   
   // Spawns server worker instances for each CPU core for horizontal scaling
