@@ -114,5 +114,91 @@
     <p>ADN — Architects & Designers Network</p>
     <p>Connect • Collaborate • Grow</p>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('form');
+      if (!form) return;
+
+      form.addEventListener('submit', async (event) => {
+        // Intercept standard HTML form navigation redirect
+        event.preventDefault();
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        // Extract input fields into a key-value data object
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        // Attach CSRF Token from meta tags if injected by server
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        if (csrfMeta) {
+          data.csrf_token = csrfMeta.getAttribute('content');
+        }
+
+        try {
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            showToast(result.message || 'Registration submitted successfully!', '#10b981');
+            form.reset();
+          } else {
+            showToast(result.error || 'Submission failed. Please try again.', '#ef4444');
+          }
+        } catch (error) {
+          console.error('[AJAX Error] Submission request failed:', error);
+          showToast('Connection error. Please check your network and try again.', '#ef4444');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      });
+
+      function showToast(message, bgColor) {
+        const toast = document.createElement('div');
+        toast.style.position = 'fixed';
+        toast.style.bottom = '24px';
+        toast.style.right = '24px';
+        toast.style.backgroundColor = bgColor;
+        toast.style.color = '#ffffff';
+        toast.style.padding = '14px 22px';
+        toast.style.borderRadius = '6px';
+        toast.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)';
+        toast.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+        toast.style.fontSize = '14px';
+        toast.style.fontWeight = '500';
+        toast.style.zIndex = '9999';
+        toast.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        toast.style.transform = 'translateY(20px)';
+        toast.style.opacity = '0';
+        toast.textContent = message;
+        
+        document.body.appendChild(toast);
+        
+        requestAnimationFrame(() => {
+          toast.style.opacity = '1';
+          toast.style.transform = 'translateY(0)';
+        });
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(20px)';
+          setTimeout(() => toast.remove(), 400);
+        }, 4500);
+      }
+    });
+  </script>
 </body>
 </html>
