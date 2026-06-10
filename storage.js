@@ -95,14 +95,18 @@ async function saveRegistration(data) {
     </div>
   `;
 
-  // Dispatch asynchronous triggers (fire-and-forget style to not slow down user response)
-  email.sendNotification(emailSubject, emailHtml).catch(err => {
-    console.error('[Background Trigger Error] Email alert dispatch failed:', err.message);
-  });
+  // Await dispatches so that serverless environments (like Vercel) do not freeze the container before execution completes
+  try {
+    await email.sendNotification(emailSubject, emailHtml);
+  } catch (err) {
+    console.error('[Trigger Error] Email alert dispatch failed:', err.message);
+  }
 
-  sheets.syncToGoogleSheets(record).catch(err => {
-    console.error('[Background Trigger Error] Google Sheets sync failed:', err.message);
-  });
+  try {
+    await sheets.syncToGoogleSheets(record);
+  } catch (err) {
+    console.error('[Trigger Error] Google Sheets sync failed:', err.message);
+  }
 
   return record;
 }
