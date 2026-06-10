@@ -183,7 +183,7 @@ function startWorkerServer() {
     // 2. Static File Serving
     if (method === 'GET') {
       // Clean and normalize requested path to prevent directory traversal
-      const safeUrl = path.normalize(url === '/' ? '/index.html' : url).replace(/^(\.\.[\/\\])+/, '');
+      const safeUrl = path.normalize(url === '/' ? '/template.html' : url).replace(/^(\.\.[\/\\])+/, '');
       const filePath = path.join(__dirname, safeUrl);
 
       // Hard check for file safety bounds
@@ -197,8 +197,8 @@ function startWorkerServer() {
         const ext = path.extname(filePath).toLowerCase();
         let contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
-        // Dynamic CSRF/Toast Injection for main landing page without changing index.html on disk
-        if (safeUrl === '/index.html' || safeUrl === '\\index.html') {
+        // Dynamic CSRF/Toast Injection for main landing page without changing template.html on disk
+        if (safeUrl === '/template.html' || safeUrl === '\\template.html') {
           const csrfToken = crypto.randomBytes(24).toString('hex');
           res.setHeader('Set-Cookie', `CSRF-Token=${csrfToken}; HttpOnly; SameSite=Strict; Path=/`);
 
