@@ -16,8 +16,14 @@ function syncToGoogleSheets(record) {
       return resolve({ skipped: true, reason: 'Missing GOOGLE_SHEET_WEBAPP_URL' });
     }
 
+    let targetUrl = GOOGLE_SHEET_WEBAPP_URL.trim();
+    // Ensure the URL has a protocol prefix to prevent connection parse failures
+    if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+      targetUrl = 'https://' + targetUrl;
+    }
+
     const payload = JSON.stringify(record);
-    sendPostRequest(GOOGLE_SHEET_WEBAPP_URL, payload, resolve, reject);
+    sendPostRequest(targetUrl, payload, resolve, reject);
   });
 }
 
@@ -32,7 +38,8 @@ function sendPostRequest(targetUrl, payload, resolve, reject) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(payload)
+        'Content-Length': Buffer.byteLength(payload),
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       }
     };
 
@@ -73,7 +80,10 @@ function sendGetRequest(targetUrl, resolve, reject) {
       hostname: parsedUrl.hostname,
       port: parsedUrl.port || 443,
       path: parsedUrl.path,
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
     };
 
     const req = https.request(options, (res) => {
