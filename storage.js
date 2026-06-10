@@ -28,7 +28,20 @@ async function saveRegistration(data) {
   // Convert to JSON Lines format (one JSON object per line)
   // This is highly performant O(1) write and prevents concurrency lockups
   const line = JSON.stringify(record) + '\n';
-  await fs.appendFile(FILE_PATH, line, 'utf-8');
+  try {
+    await fs.appendFile(FILE_PATH, line, 'utf-8');
+  } catch (err) {
+    console.warn('[Storage Warning] Failed to write local root file (expected on Vercel read-only FS):', err.message);
+    
+    // Fallback backup inside Vercel's writable /tmp directory
+    try {
+      const tempPath = path.join('/tmp', 'registrations.jsonl');
+      await fs.appendFile(tempPath, line, 'utf-8');
+      console.log('[Storage Info] Backed up record inside Vercel /tmp directory');
+    } catch (tmpErr) {
+      console.error('[Storage Error] Failed to write fallback tmp backup:', tmpErr.message);
+    }
+  }
 
   // Trigger background dispatches asynchronously (fire-and-forget, so user does not wait)
   const emailSubject = `ADN Pune: New Member Application (${record.full_name})`;
